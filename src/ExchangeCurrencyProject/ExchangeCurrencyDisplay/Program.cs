@@ -20,14 +20,14 @@ namespace ExchangeCurrencyDisplay
             {
                 try
                 {
-                    Console.WriteLine("Введите цифрой желаемое действие\n");
+                    Console.WriteLine("\nВведите цифрой желаемое действие\n");
                     Console.WriteLine("1.Посмотреть курс 2.Получить список доступных валют 3.Выход");
                     input = Convert.ToInt32(Console.ReadLine());
 
                     switch (input)
                     {
                         case 1:
-                            await GetCurrencyRateInfo();
+                            await GetCurrencyRateAsync();
                             break;
                         case 2:
                             await GetCurrencyAsync();
@@ -50,7 +50,7 @@ namespace ExchangeCurrencyDisplay
         /// Интерфейс получения данных о курсах
         /// </summary>
         /// <returns></returns>
-        static async Task GetCurrencyRateInfo()
+        static async Task GetCurrencyRateAsync()
         {
             try
             {
@@ -63,8 +63,6 @@ namespace ExchangeCurrencyDisplay
                 input = Convert.ToInt32(Console.ReadLine());
 
                 await GetRateAsync(input);
-
-                
             }
             catch (Exception ex)
             {
@@ -99,24 +97,25 @@ namespace ExchangeCurrencyDisplay
         /// <param name="cur_id">ID курса</param>
         public static async Task GetRateAsync(int cur_id)
         {
-            var Path = @"convert.txt";
+            var path = @"convert.txt";
 
             HttpResponseMessage response = await client.GetAsync($"https://www.nbrb.by/api/exrates/rates/ {cur_id}");
             string responseMessage = await response.Content.ReadAsStringAsync();
             response.EnsureSuccessStatusCode();
 
             Rate currency = JsonConvert.DeserializeObject<Rate>(responseMessage);
-            Console.WriteLine($"{currency.Cur_Name} \t Количество у.е - {currency.Cur_Scale} \t Курс по НБРБ - {currency.Cur_OfficialRate} \t Дата обновления - {currency.Date.ToLongDateString()}");
+            Console.WriteLine($"{currency.Cur_Name} \t Количество у.е - {currency.Cur_Scale} \t Курс по НБРБ - {currency.Cur_OfficialRate} \t Дата обновления - {currency.Date.ToLongDateString()}\n");
             
-            Console.WriteLine("Вы хотите это записать в блокнот? Если да, напишите 1, если нет напишите 2");
-            var input = int.Parse(Console.ReadLine());
+            Console.WriteLine("Желаете сохранить информацию в блокнот? Нажмите Y для подтверждения, любую клавишу для отмены.\n");
+            var key = Console.ReadKey();
 
-            if (input == 1)
+            if (key.Key == ConsoleKey.Y)
             {
-                using (StreamWriter sw = new StreamWriter(Path, true, System.Text.Encoding.UTF8))
+                using (StreamWriter sw = new StreamWriter(path, true, System.Text.Encoding.UTF8))
                 {
-                    await sw.WriteLineAsync($"{currency.Cur_Scale} {currency.Cur_Abbreviation} = {currency.Cur_OfficialRate} BYN - такой курс на {currency.Date}");
+                    await sw.WriteLineAsync($"{currency.Cur_Scale} {currency.Cur_Abbreviation} = {currency.Cur_OfficialRate} BYN - такой курс на {currency.Date.ToLongDateString()}");
                 }
+                Console.WriteLine("\nДанные успешно сохранены в папку приложения. Путь: bin/Debug/netcoreapp3.1/convert.txt");
             }
         }
     }
