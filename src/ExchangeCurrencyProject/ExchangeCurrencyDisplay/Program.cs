@@ -63,6 +63,8 @@ namespace ExchangeCurrencyDisplay
                 input = Convert.ToInt32(Console.ReadLine());
 
                 await GetRateAsync(input);
+
+                
             }
             catch (Exception ex)
             {
@@ -97,12 +99,25 @@ namespace ExchangeCurrencyDisplay
         /// <param name="cur_id">ID курса</param>
         public static async Task GetRateAsync(int cur_id)
         {
+            var Path = @"convert.txt";
+
             HttpResponseMessage response = await client.GetAsync($"https://www.nbrb.by/api/exrates/rates/ {cur_id}");
             string responseMessage = await response.Content.ReadAsStringAsync();
             response.EnsureSuccessStatusCode();
 
             Rate currency = JsonConvert.DeserializeObject<Rate>(responseMessage);
             Console.WriteLine($"{currency.Cur_Name} \t Количество у.е - {currency.Cur_Scale} \t Курс по НБРБ - {currency.Cur_OfficialRate} \t Дата обновления - {currency.Date.ToLongDateString()}");
+            
+            Console.WriteLine("Вы хотите это записать в блокнот? Если да, напишите 1, если нет напишите 2");
+            var input = int.Parse(Console.ReadLine());
+
+            if (input == 1)
+            {
+                using (StreamWriter sw = new StreamWriter(Path, true, System.Text.Encoding.UTF8))
+                {
+                    await sw.WriteLineAsync($"{currency.Cur_Scale} {currency.Cur_Abbreviation} = {currency.Cur_OfficialRate} BYN - такой курс на {currency.Date}");
+                }
+            }
         }
     }
 }
