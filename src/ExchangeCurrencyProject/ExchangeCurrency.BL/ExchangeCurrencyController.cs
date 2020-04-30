@@ -1,12 +1,11 @@
 ﻿using NbrbAPI.Models;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace ExchangeCurrencyDisplay
+namespace ExchangeCurrency.BL
 {
     /// <summary>
     /// Контроллер конвертации-записи валют
@@ -18,8 +17,8 @@ namespace ExchangeCurrencyDisplay
         /// <summary>
         /// Получить весь список доступных валют в API
         /// </summary>
-        public async Task GetCurrencyAsync()
-        {
+        public async Task GetCurrencyListAsync()
+        { 
             try
             {
                 HttpResponseMessage response = await client.GetAsync($"https://www.nbrb.by/api/exrates/currencies");
@@ -32,7 +31,7 @@ namespace ExchangeCurrencyDisplay
                     Console.WriteLine($"{cur.Cur_Name} ID: {cur.Cur_ID}");
                 }
             }
-            catch (HttpRequestException ex)
+            catch(Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
@@ -49,27 +48,36 @@ namespace ExchangeCurrencyDisplay
 
             Rate currency = JsonConvert.DeserializeObject<Rate>(responseMessage);
             Console.WriteLine($"{currency.Cur_Name} \t Количество у.е - {currency.Cur_Scale} \t Курс по НБРБ - {currency.Cur_OfficialRate} \t Дата обновления - {currency.Date.ToLongDateString()}\n");
-
-            SaveData(currency);
+            SaveDataAsync(currency);
         }
         /// <summary>
         /// Сохранение данных
         /// </summary>
         /// <param name="currency">Текущая валюта</param>
-        public async void SaveData(Rate currency)
+        public async void SaveDataAsync(Rate currency)
         {
-            var path = @"convert.txt";
+            if (currency == null) 
+               throw new Exception("Не удалось записать в файл пустой обьект"); 
+            
+            try
+            {                  
+                var path = @"convert.txt";
 
-            Console.WriteLine("Желаете сохранить информацию в блокнот? Нажмите Y для подтверждения, любую клавишу для отмены.\n");
-            var key = Console.ReadKey();
+                Console.WriteLine("Желаете сохранить информацию в блокнот? Нажмите Y для подтверждения, любую клавишу для отмены.\n");
+                var key = Console.ReadKey();
 
-            if (key.Key == ConsoleKey.Y)
-            {
-                using (StreamWriter sw = new StreamWriter(path, true, System.Text.Encoding.UTF8))
+                if (key.Key == ConsoleKey.Y)
                 {
-                    await sw.WriteLineAsync($"{currency.Cur_Scale} {currency.Cur_Abbreviation} = {currency.Cur_OfficialRate} BYN - такой курс на {currency.Date.ToLongDateString()}");
+                    using (StreamWriter sw = new StreamWriter(path, true, System.Text.Encoding.UTF8))
+                    {
+                        await sw.WriteLineAsync($"{currency.Cur_Scale} {currency.Cur_Abbreviation} = {currency.Cur_OfficialRate} BYN - такой курс на {currency.Date.ToLongDateString()}");
+                    }
+                    Console.WriteLine("\nДанные успешно сохранены в папку приложения. Путь: bin/Debug/netcoreapp3.1/convert.txt");
                 }
-                Console.WriteLine("\nДанные успешно сохранены в папку приложения. Путь: bin/Debug/netcoreapp3.1/convert.txt");
+            }
+            catch(Exception ex) 
+            {
+                Console.WriteLine(ex.Message);
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using ExchangeCurrency.BL;
 
 namespace ExchangeCurrencyDisplay
 {
@@ -11,21 +12,23 @@ namespace ExchangeCurrencyDisplay
         static async Task Main()
         {
             Console.WriteLine("Вас приветствует справочник валют\n");
-            while(alive)
+
+            while (alive)
             {
                 try
                 {
-                    Console.WriteLine("\nВведите цифрой желаемое действие\n");
-                    Console.WriteLine("1.Посмотреть курс 2.Получить список доступных валют 3.Выход");
+                    Console.WriteLine("\nДоступные команды:");
+                    Console.WriteLine("1.Получить список доступных валют 2.Посмотреть курс 3.Выход");
+                    Console.WriteLine("\nВведите цифрой желаемое действие:");
                     input = Convert.ToInt32(Console.ReadLine());
 
                     switch (input)
                     {
                         case 1:
-                            await GetCurrencyRateAsync();
+                            await controller.GetCurrencyListAsync();
                             break;
                         case 2:
-                            await controller.GetCurrencyAsync();
+                            await GetCurrencyRateAsync();
                             break;
                         case 3:
                             alive = false;
