@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using ExchangeCurrency.BL;
 
@@ -6,16 +7,29 @@ namespace ExchangeCurrencyDisplay
 {
     class Program
     {
-        static bool alive = true;
-        static int input;
-        static readonly ExchangeCurrencyController controller = new ExchangeCurrencyController();
-
-        static async Task Main()
+        private static async Task Main(string[] args)
         {
+            if (args.Any())
+            {
+                var cmd = new CmdProcess();
+                await cmd.CmdArgsProcessAsync(args);
+
+                return;
+            }
+
+            ConsoleProcess();
+        }
+
+        private async static void ConsoleProcess()
+        {
+            var controller = new ExchangeCurrencyController();
+            bool alive = true;
             Console.WriteLine(Constants.GREETING);
 
             while (alive)
             {
+                int input;
+
                 try
                 {
                     Console.WriteLine(Constants.AVAILABLE_COMMANDS);
@@ -29,7 +43,7 @@ namespace ExchangeCurrencyDisplay
                             await controller.GetCurrencyListAsync();
                             break;
                         case 2:
-                            await GetCurrencyRateAsync();
+                            await GetCurrencyRateAsync(controller, input);
                             break;
                         case 3:
                             alive = false;
@@ -45,11 +59,12 @@ namespace ExchangeCurrencyDisplay
                 }
             }
         }
+
         /// <summary>
         /// Интерфейс получения данных о курсе
         /// </summary>
         /// <returns></returns>
-        static async Task GetCurrencyRateAsync()
+        private static async Task GetCurrencyRateAsync(ExchangeCurrencyController controller, int input)
         {
             try
             {

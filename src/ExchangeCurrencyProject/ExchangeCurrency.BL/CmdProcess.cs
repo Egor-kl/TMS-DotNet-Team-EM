@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Threading.Tasks;
 
 namespace ExchangeCurrency.BL
 {
@@ -9,20 +8,21 @@ namespace ExchangeCurrency.BL
     /// </summary>
     public class CmdProcess
     {
-        readonly ExchangeCurrencyController controller = new ExchangeCurrencyController();
         /// <summary>
         /// Команды для CMD
         /// </summary>
         /// <param name="args"></param>
-        public void CmdArgsProcess(string[] args)
+        public async Task CmdArgsProcessAsync(string[] args)
         {
-            foreach(string arg in args)
+            var controller = new ExchangeCurrencyController();
+
+            foreach (string arg in args)
             {
-                switch(arg)
+                switch (arg)
                 {
                     case "-a":
                     case "--all":
-                        controller.GetCurrencyListAsync().GetAwaiter().GetResult();
+                        await controller.GetCurrencyListAsync();
                         break;
 
                     case "-r":
@@ -30,7 +30,7 @@ namespace ExchangeCurrency.BL
                         Console.WriteLine(Constants.POPULAR_RATES);
                         Console.Write(Constants.INPUT_ID_RATE);
                         int input = Convert.ToInt32(Console.ReadLine());
-                        controller.GetRateAsync(input).GetAwaiter().GetResult();
+                        await controller.GetRateAsync(input);
                         break;
 
                     case "-h":

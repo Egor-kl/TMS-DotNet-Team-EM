@@ -18,19 +18,28 @@ namespace ExchangeCurrency.BL
         /// Получить весь список доступных валют в API
         /// </summary>
         public async Task GetCurrencyListAsync()
-        { 
-            HttpResponseMessage response = await client.GetAsync(Constants.CURRENCIES);
-            string responseMessage = await response.Content.ReadAsStringAsync();
-            response.EnsureSuccessStatusCode();
-
-            var currency_list = JsonConvert.DeserializeObject<Currency[]>(responseMessage);
-            var emptyRow = new string('-', 52);
-            Console.WriteLine(emptyRow);
-            foreach (Currency cur in currency_list)
+        {
+            // TODO: try..catch
+            try
             {
-                Console.WriteLine("| {0,5} | {1,40} |", cur.Cur_ID, cur.Cur_Name);
+                // TODO: refact it
+                HttpResponseMessage response = await client.GetAsync(Constants.CURRENCIES);
+                string responseMessage = await response.Content.ReadAsStringAsync();
+                response.EnsureSuccessStatusCode();
+
+                var currency_list = JsonConvert.DeserializeObject<Currency[]>(responseMessage);
+                var emptyRow = new string('-', 52);
                 Console.WriteLine(emptyRow);
-            }  
+                foreach (Currency cur in currency_list)
+                {
+                    Console.WriteLine("| {0,5} | {1,40} |", cur.Cur_ID, cur.Cur_Name);
+                    Console.WriteLine(emptyRow);
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
         /// <summary>
         /// Получить данные о конкретном курсе
@@ -43,18 +52,18 @@ namespace ExchangeCurrency.BL
             response.EnsureSuccessStatusCode();
 
             Rate currency = JsonConvert.DeserializeObject<Rate>(responseMessage);
+            // TODO: Contants
             Console.WriteLine($"{currency.Cur_Name} \t Количество у.е - {currency.Cur_Scale} \t Курс по НБРБ - {currency.Cur_OfficialRate} \t Дата обновления - {currency.Date.ToLongDateString()}\n");
             SaveDataAsync(currency);
         }
         /// <summary>
         /// Сохранение данных
         /// </summary>
-        /// <param name="currency">Текущая валюта</param>
-        public async void SaveDataAsync(Rate currency)
+        /// <param name="rate">Текущая валюта</param>
+        public async void SaveDataAsync(Rate rate)
         {
-            if (currency == null) 
-               throw new Exception(Constants.EXCEPTION_SAVE); 
-                   
+            rate = rate ?? throw new Exception(Constants.EXCEPTION_SAVE);
+
             Console.WriteLine(Constants.QUESTION_SAVE);
             var key = Console.ReadKey();
 
@@ -62,7 +71,7 @@ namespace ExchangeCurrency.BL
             {
                 using (StreamWriter sw = new StreamWriter(Constants.FILE_PATH, true, System.Text.Encoding.UTF8))
                 {
-                    await sw.WriteLineAsync($"{currency.Cur_Scale} {currency.Cur_Abbreviation} = {currency.Cur_OfficialRate} BYN - Курс на {currency.Date.ToLongDateString()}");
+                    await sw.WriteLineAsync($"{rate.Cur_Scale} {rate.Cur_Abbreviation} = {rate.Cur_OfficialRate} BYN - Курс на {rate.Date.ToLongDateString()}");
                 }
                 Console.WriteLine(Constants.SUCCESFUL_SAVE);
             }

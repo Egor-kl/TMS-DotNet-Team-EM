@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ExchangeCurrency.BL
+﻿namespace ExchangeCurrency.BL
 {
     /// <summary>
     /// Константы
@@ -13,10 +9,12 @@ namespace ExchangeCurrency.BL
         /// Приветствие
         /// </summary>
         public const string GREETING = "Вас приветствует справочник валют\n";
+
         /// <summary>
         /// Список команд
         /// </summary>
         public const string COMMAND_LIST = "1.Получить список доступных валют 2.Посмотреть курс 3.Выход";
+
         /// <summary>
         /// Доступные команды
         /// </summary>
@@ -41,7 +39,7 @@ namespace ExchangeCurrency.BL
         /// <summary>
         /// Путь к файлу
         /// </summary>
-        public const string  FILE_PATH = @"convert.txt";
+        public const string FILE_PATH = @"convert.txt";
         /// <summary>
         /// Вопрос о сохранении данных
         /// </summary>
