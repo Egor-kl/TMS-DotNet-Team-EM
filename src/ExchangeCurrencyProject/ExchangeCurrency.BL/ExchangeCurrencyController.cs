@@ -53,9 +53,9 @@ namespace ExchangeCurrency.BL
         public async void SaveDataAsync(Rate currency)
         {
             if (currency == null) 
-               throw new Exception("Не удалось записать в файл пустой обьект"); 
+               throw new Exception(Constants.EXCEPTION_SAVE); 
                    
-            Console.WriteLine("Желаете сохранить информацию в блокнот? Нажмите Y для подтверждения, любую клавишу для отмены.\n");
+            Console.WriteLine(Constants.QUESTION_SAVE);
             var key = Console.ReadKey();
 
             if (key.Key == ConsoleKey.Y)
@@ -64,7 +64,7 @@ namespace ExchangeCurrency.BL
                 {
                     await sw.WriteLineAsync($"{currency.Cur_Scale} {currency.Cur_Abbreviation} = {currency.Cur_OfficialRate} BYN - такой курс на {currency.Date.ToLongDateString()}");
                 }
-                Console.WriteLine("\nДанные успешно сохранены в папку приложения. Путь: bin/Debug/netcoreapp3.1/convert.txt");
+                Console.WriteLine(Constants.SUCCESFUL_SAVE);
             }
         }
     }

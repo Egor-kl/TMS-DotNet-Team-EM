@@ -12,15 +12,15 @@ namespace ExchangeCurrencyDisplay
 
         static async Task Main()
         {
-            Console.WriteLine("Вас приветствует справочник валют\n");
+            Console.WriteLine(Constants.GREETING);
 
             while (alive)
             {
                 try
                 {
                     Console.WriteLine("\nДоступные команды:");
-                    Console.WriteLine("1.Получить список доступных валют 2.Посмотреть курс 3.Выход");
-                    Console.Write("\nВведите цифрой желаемое действие: ");
+                    Console.WriteLine(Constants.COMMAND_LIST);
+                    Console.Write(Constants.CHOICE_MAKE);
                     input = Convert.ToInt32(Console.ReadLine());
 
                     switch (input)
