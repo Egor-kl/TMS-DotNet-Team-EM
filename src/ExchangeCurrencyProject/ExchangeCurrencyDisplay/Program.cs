@@ -20,7 +20,7 @@ namespace ExchangeCurrencyDisplay
                 {
                     Console.WriteLine("\nДоступные команды:");
                     Console.WriteLine("1.Получить список доступных валют 2.Посмотреть курс 3.Выход");
-                    Console.WriteLine("\nВведите цифрой желаемое действие:");
+                    Console.Write("\nВведите цифрой желаемое действие: ");
                     input = Convert.ToInt32(Console.ReadLine());
 
                     switch (input)
@@ -57,7 +57,7 @@ namespace ExchangeCurrencyDisplay
                 Console.WriteLine("Доллар США ID: 145");
                 Console.WriteLine("Eвро ID: 292");
                 Console.WriteLine("Российский рубль ID:298\n");
-                Console.WriteLine("Введите ID желаемого курса, информацию которого хотите отобразить:");
+                Console.Write("Введите ID желаемого курса, информацию которого хотите отобразить: ");
 
                 input = Convert.ToInt32(Console.ReadLine());
                 await controller.GetRateAsync(input);

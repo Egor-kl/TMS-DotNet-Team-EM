@@ -19,22 +19,18 @@ namespace ExchangeCurrency.BL
         /// </summary>
         public async Task GetCurrencyListAsync()
         { 
-            try
-            {
-                HttpResponseMessage response = await client.GetAsync($"https://www.nbrb.by/api/exrates/currencies");
-                string responseMessage = await response.Content.ReadAsStringAsync();
-                response.EnsureSuccessStatusCode();
+            HttpResponseMessage response = await client.GetAsync(Constants.CURRENCIES);
+            string responseMessage = await response.Content.ReadAsStringAsync();
+            response.EnsureSuccessStatusCode();
 
-                var currency_list = JsonConvert.DeserializeObject<Currency[]>(responseMessage);
-                foreach (Currency cur in currency_list)
-                {
-                    Console.WriteLine($"{cur.Cur_Name} ID: {cur.Cur_ID}");
-                }
-            }
-            catch(Exception ex)
+            var currency_list = JsonConvert.DeserializeObject<Currency[]>(responseMessage);
+            var emptyRow = new string('-', 52);
+            Console.WriteLine(emptyRow);
+            foreach (Currency cur in currency_list)
             {
-                Console.WriteLine(ex.Message);
-            }
+                Console.WriteLine("| {0,5} | {1,40} |", cur.Cur_ID, cur.Cur_Name);
+                Console.WriteLine(emptyRow);
+            }  
         }
         /// <summary>
         /// Получить данные о конкретном курсе
@@ -42,7 +38,7 @@ namespace ExchangeCurrency.BL
         /// <param name="cur_id">ID курса</param>
         public async Task GetRateAsync(int cur_id)
         {
-            HttpResponseMessage response = await client.GetAsync($"https://www.nbrb.by/api/exrates/rates/ {cur_id}");
+            HttpResponseMessage response = await client.GetAsync($"{Constants.RATE}{cur_id}");
             string responseMessage = await response.Content.ReadAsStringAsync();
             response.EnsureSuccessStatusCode();
 
@@ -58,26 +54,17 @@ namespace ExchangeCurrency.BL
         {
             if (currency == null) 
                throw new Exception("Не удалось записать в файл пустой обьект"); 
-            
-            try
-            {                  
-                var path = @"convert.txt";
+                   
+            Console.WriteLine("Желаете сохранить информацию в блокнот? Нажмите Y для подтверждения, любую клавишу для отмены.\n");
+            var key = Console.ReadKey();
 
-                Console.WriteLine("Желаете сохранить информацию в блокнот? Нажмите Y для подтверждения, любую клавишу для отмены.\n");
-                var key = Console.ReadKey();
-
-                if (key.Key == ConsoleKey.Y)
-                {
-                    using (StreamWriter sw = new StreamWriter(path, true, System.Text.Encoding.UTF8))
-                    {
-                        await sw.WriteLineAsync($"{currency.Cur_Scale} {currency.Cur_Abbreviation} = {currency.Cur_OfficialRate} BYN - такой курс на {currency.Date.ToLongDateString()}");
-                    }
-                    Console.WriteLine("\nДанные успешно сохранены в папку приложения. Путь: bin/Debug/netcoreapp3.1/convert.txt");
-                }
-            }
-            catch(Exception ex) 
+            if (key.Key == ConsoleKey.Y)
             {
-                Console.WriteLine(ex.Message);
+                using (StreamWriter sw = new StreamWriter(Constants.FILE_PATH, true, System.Text.Encoding.UTF8))
+                {
+                    await sw.WriteLineAsync($"{currency.Cur_Scale} {currency.Cur_Abbreviation} = {currency.Cur_OfficialRate} BYN - такой курс на {currency.Date.ToLongDateString()}");
+                }
+                Console.WriteLine("\nДанные успешно сохранены в папку приложения. Путь: bin/Debug/netcoreapp3.1/convert.txt");
             }
         }
     }
