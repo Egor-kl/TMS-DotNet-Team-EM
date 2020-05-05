@@ -9,6 +9,7 @@ namespace ExchangeCurrencyDisplay
         static bool alive = true;
         static int input;
         static readonly ExchangeCurrencyController controller = new ExchangeCurrencyController();
+
         static async Task Main()
         {
             Console.WriteLine("Вас приветствует справочник валют\n");
@@ -52,11 +53,11 @@ namespace ExchangeCurrencyDisplay
         {
             try
             {
-                Console.WriteLine("Введите ID желаемого курса, информацию которого хотите отобразить");
                 Console.WriteLine("Популярные курсы:\n");
                 Console.WriteLine("Доллар США ID: 145");
                 Console.WriteLine("Eвро ID: 292");
                 Console.WriteLine("Российский рубль ID:298\n");
+                Console.WriteLine("Введите ID желаемого курса, информацию которого хотите отобразить:");
 
                 input = Convert.ToInt32(Console.ReadLine());
                 await controller.GetRateAsync(input);
