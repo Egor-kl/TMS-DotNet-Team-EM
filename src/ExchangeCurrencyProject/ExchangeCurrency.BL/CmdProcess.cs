@@ -27,11 +27,8 @@ namespace ExchangeCurrency.BL
 
                     case "-r":
                     case "--rate":
-                        Console.WriteLine("Популярные курсы:\n");
-                        Console.WriteLine("Доллар США ID: 145");
-                        Console.WriteLine("Eвро ID: 292");
-                        Console.WriteLine("Российский рубль ID:298\n");
-                        Console.WriteLine("Введите ID желаемого курса, информацию которого хотите отобразить:");
+                        Console.WriteLine(Constants.POPULAR_RATES);
+                        Console.Write(Constants.INPUT_ID_RATE);
                         int input = Convert.ToInt32(Console.ReadLine());
                         controller.GetRateAsync(input).GetAwaiter().GetResult();
                         break;

@@ -18,7 +18,7 @@ namespace ExchangeCurrencyDisplay
             {
                 try
                 {
-                    Console.WriteLine("\nДоступные команды:");
+                    Console.WriteLine(Constants.AVAILABLE_COMMANDS);
                     Console.WriteLine(Constants.COMMAND_LIST);
                     Console.Write(Constants.CHOICE_MAKE);
                     input = Convert.ToInt32(Console.ReadLine());
@@ -35,7 +35,7 @@ namespace ExchangeCurrencyDisplay
                             alive = false;
                             break;
                         default:
-                            Console.WriteLine("Неккоректный ввод");
+                            Console.WriteLine(Constants.INCORRECT_INPUT);
                             break;
                     }
                 }
@@ -53,11 +53,8 @@ namespace ExchangeCurrencyDisplay
         {
             try
             {
-                Console.WriteLine("Популярные курсы:\n");
-                Console.WriteLine("Доллар США ID: 145");
-                Console.WriteLine("Eвро ID: 292");
-                Console.WriteLine("Российский рубль ID:298\n");
-                Console.Write("Введите ID желаемого курса, информацию которого хотите отобразить: ");
+                Console.WriteLine(Constants.POPULAR_RATES);
+                Console.Write(Constants.INPUT_ID_RATE);
 
                 input = Convert.ToInt32(Console.ReadLine());
                 await controller.GetRateAsync(input);

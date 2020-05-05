@@ -62,7 +62,7 @@ namespace ExchangeCurrency.BL
             {
                 using (StreamWriter sw = new StreamWriter(Constants.FILE_PATH, true, System.Text.Encoding.UTF8))
                 {
-                    await sw.WriteLineAsync($"{currency.Cur_Scale} {currency.Cur_Abbreviation} = {currency.Cur_OfficialRate} BYN - такой курс на {currency.Date.ToLongDateString()}");
+                    await sw.WriteLineAsync($"{currency.Cur_Scale} {currency.Cur_Abbreviation} = {currency.Cur_OfficialRate} BYN - Курс на {currency.Date.ToLongDateString()}");
                 }
                 Console.WriteLine(Constants.SUCCESFUL_SAVE);
             }
