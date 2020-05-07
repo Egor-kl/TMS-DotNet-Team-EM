@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using ExchangeCurrency.BL;
 
@@ -6,12 +7,18 @@ namespace ExchangeCurrencyDisplay
 {
     class Program
     {
-        static bool alive = true;
-        static int input;
-        static readonly ExchangeCurrencyController controller = new ExchangeCurrencyController();
+       private static readonly ExchangeCurrencyController controller = new ExchangeCurrencyController();
 
-        static async Task Main()
+        private static async Task Main(string[] args)
         {
+            if(args.Any())
+            {
+                var cmd = new CmdProcess();
+                await cmd.CmdArgsProcessAsync(args);
+                return;
+            }
+
+            bool alive = true;
             Console.WriteLine(Constants.GREETING);
 
             while (alive)
@@ -20,8 +27,8 @@ namespace ExchangeCurrencyDisplay
                 {
                     Console.WriteLine(Constants.AVAILABLE_COMMANDS);
                     Console.WriteLine(Constants.COMMAND_LIST);
-                    Console.Write(Constants.CHOICE_MAKE);
-                    input = Convert.ToInt32(Console.ReadLine());
+                    Console.Write(Constants.CHOICE);
+                    var input = Convert.ToInt32(Console.ReadLine());
 
                     switch (input)
                     {
@@ -29,7 +36,7 @@ namespace ExchangeCurrencyDisplay
                             await controller.GetCurrencyListAsync();
                             break;
                         case 2:
-                            await GetCurrencyRateAsync();
+                            await controller.GetRateAsync();
                             break;
                         case 3:
                             alive = false;
@@ -43,25 +50,6 @@ namespace ExchangeCurrencyDisplay
                 {
                     Console.WriteLine(ex.Message);
                 }
-            }
-        }
-        /// <summary>
-        /// Интерфейс получения данных о курсе
-        /// </summary>
-        /// <returns></returns>
-        static async Task GetCurrencyRateAsync()
-        {
-            try
-            {
-                Console.WriteLine(Constants.POPULAR_RATES);
-                Console.Write(Constants.INPUT_ID_RATE);
-
-                input = Convert.ToInt32(Console.ReadLine());
-                await controller.GetRateAsync(input);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
             }
         }
     }

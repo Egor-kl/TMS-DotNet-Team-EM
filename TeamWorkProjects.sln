@@ -3,13 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29911.84
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeCurrencyDisplay", "src\ExchangeCurrencyProject\ExchangeCurrencyDisplay\ExchangeCurrencyDisplay.csproj", "{760B5F17-2577-45B9-9141-7B6ADD2F369A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeCurrency.App", "src\ExchangeCurrencyProject\ExchangeCurrencyDisplay\ExchangeCurrency.App.csproj", "{760B5F17-2577-45B9-9141-7B6ADD2F369A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeCurrency.BL", "src\ExchangeCurrencyProject\ExchangeCurrency.BL\ExchangeCurrency.BL.csproj", "{455865C4-DD55-41B0-BF4F-D9790DF82E51}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeCurrency.BL", "src\ExchangeCurrencyProject\ExchangeCurrency.BL\ExchangeCurrency.BL.csproj", "{455865C4-DD55-41B0-BF4F-D9790DF82E51}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeCurrencyTest", "tests\ExchangeCurrencyTests\ExchangeCurrencyTest\ExchangeCurrencyTest.csproj", "{AAED7B7D-A7E2-4846-8C1C-73CD1B285603}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeCurrency.Tests", "tests\ExchangeCurrencyTests\ExchangeCurrencyTest\ExchangeCurrency.Tests.csproj", "{AAED7B7D-A7E2-4846-8C1C-73CD1B285603}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ExchangeConverterProject", "ExchangeConverterProject", "{B73C200C-7018-42ED-B191-AEC43FD6856F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{500B3F56-48D3-4307-A0E5-FA1286BCFDED}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{29C7FAFF-8C5B-405E-A2C2-0F32776B12C7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +40,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{760B5F17-2577-45B9-9141-7B6ADD2F369A} = {B73C200C-7018-42ED-B191-AEC43FD6856F}
 		{455865C4-DD55-41B0-BF4F-D9790DF82E51} = {B73C200C-7018-42ED-B191-AEC43FD6856F}
+		{AAED7B7D-A7E2-4846-8C1C-73CD1B285603} = {29C7FAFF-8C5B-405E-A2C2-0F32776B12C7}
+		{B73C200C-7018-42ED-B191-AEC43FD6856F} = {500B3F56-48D3-4307-A0E5-FA1286BCFDED}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E1CE2FE5-6DCA-489E-A0CA-1884608976ED}

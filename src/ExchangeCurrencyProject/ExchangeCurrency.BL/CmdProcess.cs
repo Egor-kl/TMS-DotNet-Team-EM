@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Threading.Tasks;
 
 namespace ExchangeCurrency.BL
 {
@@ -9,28 +8,26 @@ namespace ExchangeCurrency.BL
     /// </summary>
     public class CmdProcess
     {
-        readonly ExchangeCurrencyController controller = new ExchangeCurrencyController();
         /// <summary>
         /// Команды для CMD
         /// </summary>
         /// <param name="args"></param>
-        public void CmdArgsProcess(string[] args)
+        public async Task CmdArgsProcessAsync(string[] args)
         {
-            foreach(string arg in args)
+           var controller = new ExchangeCurrencyController();
+
+            foreach (string arg in args)
             {
                 switch(arg)
                 {
                     case "-a":
                     case "--all":
-                        controller.GetCurrencyListAsync().GetAwaiter().GetResult();
+                        await controller.GetCurrencyListAsync();
                         break;
 
                     case "-r":
                     case "--rate":
-                        Console.WriteLine(Constants.POPULAR_RATES);
-                        Console.Write(Constants.INPUT_ID_RATE);
-                        int input = Convert.ToInt32(Console.ReadLine());
-                        controller.GetRateAsync(input).GetAwaiter().GetResult();
+                        await controller.GetRateAsync();
                         break;
 
                     case "-h":
@@ -41,10 +38,15 @@ namespace ExchangeCurrency.BL
                         break;
 
                     default:
-                        Console.WriteLine($"Некорректный ввод команды {arg} ");
+                        Console.WriteLine($"Некорректный ввод команды {arg}");
+                        Console.WriteLine($"Доступные команды:\n");
+                        Console.WriteLine("-a , --all   :Получить список доступных валют");
+                        Console.WriteLine("-r , --rate  :Получить данные о конкретном курсе");
+                        Console.WriteLine("-h, --help   :Получить список доступных команд");
                         break;
                 }
             }
         }
+
     }
 }
