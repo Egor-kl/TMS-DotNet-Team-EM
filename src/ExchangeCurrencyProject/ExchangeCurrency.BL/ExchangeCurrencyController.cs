@@ -8,58 +8,83 @@ using System.Threading.Tasks;
 namespace ExchangeCurrency.BL
 {
     /// <summary>
-    /// Контроллер конвертации-записи валют
+    /// Контроллер конвертации-записи валют.
     /// </summary>
     public class ExchangeCurrencyController
     {
         static readonly HttpClient client = new HttpClient();
 
         /// <summary>
-        /// Получить весь список доступных валют в API
+        /// Получить весь список доступных валют в API.
         /// </summary>
         public async Task GetCurrencyListAsync()
         {
-            // TODO: try..catch
             try
             {
-                // TODO: refact it
-                HttpResponseMessage response = await client.GetAsync(Constants.CURRENCIES);
-                string responseMessage = await response.Content.ReadAsStringAsync();
-                response.EnsureSuccessStatusCode();
+                string responseMessage = await GetResponseAsync(Constants.CURRENCIES);
 
                 var currency_list = JsonConvert.DeserializeObject<Currency[]>(responseMessage);
-                var emptyRow = new string('-', 52);
-                Console.WriteLine(emptyRow);
+                var empty_row = new string('-', 52);
+                Console.WriteLine(empty_row);
                 foreach (Currency cur in currency_list)
                 {
                     Console.WriteLine("| {0,5} | {1,40} |", cur.Cur_ID, cur.Cur_Name);
-                    Console.WriteLine(emptyRow);
+                    Console.WriteLine(empty_row);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                Console.WriteLine(ex.Message);
             }
         }
+
         /// <summary>
-        /// Получить данные о конкретном курсе
+        /// Получить данные о конкретном курсе.
         /// </summary>
-        /// <param name="cur_id">ID курса</param>
-        public async Task GetRateAsync(int cur_id)
+        /// <param name="cur_id">ID курса.</param>
+        public async Task GetRateAsync()
         {
-            HttpResponseMessage response = await client.GetAsync($"{Constants.RATE}{cur_id}");
+            try
+            {
+                using (StreamReader sr = new StreamReader(Constants.POPULAR_COURSES_FILE_PATH))
+                {
+                    Console.WriteLine(await sr.ReadToEndAsync());
+                }
+
+                Console.Write(Constants.INPUT_ID_RATE);
+                var input = Convert.ToInt32(Console.ReadLine());
+
+                string responseMessage = await GetResponseAsync($"{Constants.RATE}{input}");
+
+                Rate currency = JsonConvert.DeserializeObject<Rate>(responseMessage);
+                Console.WriteLine($"| {currency.Cur_Name} |\t {Constants.CU_AMOUNT} - {currency.Cur_Scale} |\t {Constants.RATE_BY_NBRB} - {currency.Cur_OfficialRate} |\t {Constants.UPDATE} - {currency.Date.ToLongDateString()} |\n");
+                SaveDataAsync(currency);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Получение ответа на определенный запрос.
+        /// </summary>
+        /// <param name="link">Ссылка на API.</param>
+        /// <returns>Ответ в виде строки.</returns>
+        public async Task<string> GetResponseAsync(string link)
+        {
+            //Вопрос: как можно установить время ответа по истечении которого будет генерироваться исключение
+            HttpResponseMessage response = await client.GetAsync(link);
             string responseMessage = await response.Content.ReadAsStringAsync();
             response.EnsureSuccessStatusCode();
 
-            Rate currency = JsonConvert.DeserializeObject<Rate>(responseMessage);
-            // TODO: Contants
-            Console.WriteLine($"{currency.Cur_Name} \t Количество у.е - {currency.Cur_Scale} \t Курс по НБРБ - {currency.Cur_OfficialRate} \t Дата обновления - {currency.Date.ToLongDateString()}\n");
-            SaveDataAsync(currency);
+            return responseMessage;
         }
+
         /// <summary>
-        /// Сохранение данных
+        /// Сохранение данных.
         /// </summary>
-        /// <param name="rate">Текущая валюта</param>
+        /// <param name="rate">Текущая валюта.</param>
         public async void SaveDataAsync(Rate rate)
         {
             rate = rate ?? throw new Exception(Constants.EXCEPTION_SAVE);
@@ -71,7 +96,7 @@ namespace ExchangeCurrency.BL
             {
                 using (StreamWriter sw = new StreamWriter(Constants.FILE_PATH, true, System.Text.Encoding.UTF8))
                 {
-                    await sw.WriteLineAsync($"{rate.Cur_Scale} {rate.Cur_Abbreviation} = {rate.Cur_OfficialRate} BYN - Курс на {rate.Date.ToLongDateString()}");
+                    await sw.WriteLineAsync($"{rate.Cur_Scale} {rate.Cur_Abbreviation} = {rate.Cur_OfficialRate} BYN - {Constants.RATE_FOR} {rate.Date.ToLongDateString()}");
                 }
                 Console.WriteLine(Constants.SUCCESFUL_SAVE);
             }

@@ -14,7 +14,7 @@ namespace ExchangeCurrency.BL
         /// <param name="args"></param>
         public async Task CmdArgsProcessAsync(string[] args)
         {
-            var controller = new ExchangeCurrencyController();
+           var controller = new ExchangeCurrencyController();
 
             foreach (string arg in args)
             {
@@ -27,10 +27,7 @@ namespace ExchangeCurrency.BL
 
                     case "-r":
                     case "--rate":
-                        Console.WriteLine(Constants.POPULAR_RATES);
-                        Console.Write(Constants.INPUT_ID_RATE);
-                        int input = Convert.ToInt32(Console.ReadLine());
-                        await controller.GetRateAsync(input);
+                        await controller.GetRateAsync();
                         break;
 
                     case "-h":
@@ -41,10 +38,15 @@ namespace ExchangeCurrency.BL
                         break;
 
                     default:
-                        Console.WriteLine($"Некорректный ввод команды {arg} ");
+                        Console.WriteLine($"Некорректный ввод команды {arg}");
+                        Console.WriteLine($"Доступные команды:\n");
+                        Console.WriteLine("-a , --all   :Получить список доступных валют");
+                        Console.WriteLine("-r , --rate  :Получить данные о конкретном курсе");
+                        Console.WriteLine("-h, --help   :Получить список доступных команд");
                         break;
                 }
             }
         }
+
     }
 }
