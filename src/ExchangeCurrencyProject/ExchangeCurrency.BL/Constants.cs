@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ExchangeCurrency.BL
+﻿namespace ExchangeCurrency.BL
 {
     /// <summary>
     /// Константы
@@ -61,7 +59,7 @@ namespace ExchangeCurrency.BL
         /// <summary>
         /// Путь к файлу с данными определенных курсов
         /// </summary>
-        public const string  FILE_PATH = @"convert.txt";
+        public const string FILE_PATH = @"convert.txt";
 
         /// <summary>
         /// Путь к файлу c популярными курсами

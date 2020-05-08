@@ -9,15 +9,8 @@ namespace ExchangeCurrencyDisplay
     {
        private static readonly ExchangeCurrencyController controller = new ExchangeCurrencyController();
 
-        private static async Task Main(string[] args)
+        private static async Task Main()
         {
-            if(args.Any())
-            {
-                var cmd = new CmdProcess();
-                await cmd.CmdArgsProcessAsync(args);
-                return;
-            }
-
             bool alive = true;
             Console.WriteLine(Constants.GREETING);
 

@@ -12,7 +12,7 @@ namespace ExchangeCurrency.BL
     /// </summary>
     public class ExchangeCurrencyController
     {
-        static readonly HttpClient client = new HttpClient();
+        private readonly HttpClient client = new HttpClient();
 
         /// <summary>
         /// Получить весь список доступных валют в API.
@@ -41,7 +41,6 @@ namespace ExchangeCurrency.BL
         /// <summary>
         /// Получить данные о конкретном курсе.
         /// </summary>
-        /// <param name="cur_id">ID курса.</param>
         public async Task GetRateAsync()
         {
             try
@@ -98,6 +97,7 @@ namespace ExchangeCurrency.BL
                 {
                     await sw.WriteLineAsync($"{rate.Cur_Scale} {rate.Cur_Abbreviation} = {rate.Cur_OfficialRate} BYN - {Constants.RATE_FOR} {rate.Date.ToLongDateString()}");
                 }
+
                 Console.WriteLine(Constants.SUCCESFUL_SAVE);
             }
         }

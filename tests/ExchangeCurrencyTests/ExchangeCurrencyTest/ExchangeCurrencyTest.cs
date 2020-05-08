@@ -1,8 +1,6 @@
 using System;
-using Xunit;
-using ExchangeCurrency.BL;
 using System.Net.Http;
-using NbrbAPI.Models;
+using Xunit;
 
 namespace Shop_Simulator_Test
 {
@@ -44,7 +42,7 @@ namespace Shop_Simulator_Test
                 string responseMessage = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 response.EnsureSuccessStatusCode();
             }
-            catch(Exception)
+            catch (Exception)
             {
                 isException = true;
             }
@@ -52,31 +50,5 @@ namespace Shop_Simulator_Test
             // Assert
             Assert.True(isException);
         }
-
-        //[Fact]
-        //public void SaveData_WhenSaveTheEmptyRateObject_ReturnArgumentNullException()
-        //{
-        //    // Arrange
-        //    var controller = new ExchangeCurrencyController();
-        //    Rate rate = null;
-        //    bool isException = false;
-
-        //    // Act
-        //    try
-        //    {
-        //        controller.SaveDataAsync(rate);
-        //    }
-        //    catch(Exception)
-        //    {
-        //        isException = true;
-        //    }
-
-        //    // Assert
-        //    Assert.True(isException);
-        //}
-
-
-
     }
-    
 }
