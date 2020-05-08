@@ -23,8 +23,6 @@ namespace ExchangeCurrencyDisplay
 
             while (alive)
             {
-                int input;
-
                 try
                 {
                     Console.WriteLine(Constants.AVAILABLE_COMMANDS);
